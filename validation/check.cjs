@@ -9,6 +9,25 @@ const example = path.join(root, 'examples/binary-search');
 const output = path.join(root, 'tmp/validation');
 fs.mkdirSync(output, { recursive: true });
 
+// Check the simple inline local Markdown links used by this repository.
+const documents = ['README.md', 'AGENTS.md', 'CONTRIBUTING.md'];
+for (const directory of ['skills', 'examples', 'validation', '.github']) {
+	for (const file of fs.readdirSync(path.join(root, directory), { recursive: true })) {
+		if (file.endsWith('.md')) documents.push(path.join(directory, file));
+	}
+}
+for (const file of documents) {
+	const content = fs.readFileSync(path.join(root, file), 'utf8');
+	for (const match of content.matchAll(/\]\(([^)]+)\)/g)) {
+		const target = match[1];
+		if (/^(?:[a-z][a-z\d+.-]*:|#)/i.test(target)) continue;
+		assert(fs.existsSync(path.resolve(root, path.dirname(file), target.split('#')[0])), `Broken local link in ${file}: ${target}`);
+	}
+}
+assert.equal(fs.readFileSync(path.join(root, 'LICENSE'), 'utf8'), fs.readFileSync(path.join(root, 'skills/personalized-courseware/LICENSE'), 'utf8'), 'Standalone Skill license must match the project license.');
+assert.equal(fs.readFileSync(path.join(root, 'skills/personalized-courseware/assets/reading.css'), 'utf8'), fs.readFileSync(path.join(example, 'reading.css'), 'utf8'), 'Example stylesheet must match the template.');
+console.log(`Repository: ${documents.length} Markdown files checked; license and stylesheet copies match.`);
+
 // Generate all nondecreasing arrays over {-1, 0, 1}, length 0..5.
 const arrays = [[]];
 function extend(prefix, min) {

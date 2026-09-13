@@ -1,5 +1,6 @@
 ---
 name: personalized-courseware
+license: MIT
 description: Analyze supplied course slides, diagnose prerequisite gaps, and produce source-faithful personalized visual HTML lessons, then support self-study or detailed AI-guided teaching from those lessons. Use for adapting mathematics or computer-science PDF courseware or continuing study of the generated material; not for inventing a course without sources.
 ---
 
