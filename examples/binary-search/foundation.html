@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>二分查找 · 展开基础与证明</title>
+	<link rel="stylesheet" href="reading.css">
+</head>
+<body>
+	<a class="skip-link" href="#content">跳到正文</a>
+	<main id="content">
+<header>
+	<p class="eyebrow">自制公开候选示例 · 人工模拟学生配置</p>
+	<h1>二分查找：从候选区间到正确算法</h1>
+	<p>展开基础与证明。本章问题：在有序数组中找到目标，并说明每次排除为什么安全。</p>
+	<p><strong>暂定学习起点：</strong>有序性的含义还不清楚；闭区间见过但不会稳定更新。本版补充排除依据，并展开不变量的建立、保持和终止。这是预设回答的演示，不是真实学生测评；可修改 learner-profiles.md 中的知识点证据。</p>
+	<div class="controls" hidden><label for="font-size">字号</label><select id="font-size"><option value="18">标准</option><option value="21">较大</option><option value="24">大</option></select><button id="print" type="button">打印 / 保存为 PDF</button></div>
+	<nav aria-label="本章目录"><a href="#concept">1 概念</a><a href="#proof">2 证明</a><a href="#algorithm">3 算法</a></nav>
+</header>
+<section id="concept"><h2>1. 有序输入与候选区间</h2>
+<figure><div class="original-page" tabindex="0" role="region" aria-label="原课件第 1 页，窄屏可横向滚动"><a href="source-1.png"><img src="source-1.png" alt="自制原课件第 1 页：有序数组、任务目标与索引图。；完整转录和解释见紧邻正文。" width="1200" height="900"></a></div><figcaption>原图 · 未裁切的原课件整页；窄屏可横向滚动，点击放大。<a href="source.pdf#page=1">source.pdf · PDF 第 1 页 · Slide 4</a>。有序数组、任务目标与索引图。</figcaption></figure>
+<blockquote lang="en">Precondition: a is a finite nondecreasing array.<br>For valid indices i &lt; j, a[i] &lt;= a[j].<br>Goal: return any index of x, or -1 if x is absent.<br>Candidate interval: [l, r], with both endpoints included.<span class="source">原文逐字引用 · source.pdf · PDF 第 1 页 · Slide 4</span></blockquote>
+<p>翻译 · 前提：a 是有限的非降序数组。对有效索引 i &lt; j，有 a[i] ≤ a[j]。目标是返回 x 的任意一个索引；不存在时返回 −1。候选区间 [l, r] 包含两端。</p>
+<p>原例翻译 · x = 11，初始 l = 0、r = 6。方框内为值，下方 i 表示从 0 开始的索引。来源同上。</p>
+<aside class="supplement"><h3>新增前置解释 · 有序性让排除成为可能</h3><p>非降序允许相等，只要求越靠右不更小。例如原图里索引 3 的值是 7；它左边的值都不超过 7。找 11 时，这些位置都不可能命中，所以一次能排除多个位置。若数组未排序，左侧可能藏着 11，这一步就不成立。</p><p>索引是位置，从 0 开始；值是格子里的数。[0, 6] 包含两端，共 6 − 0 + 1 = 7 个位置。返回 5 表示第六个位置，不是说目标值等于 5。</p><p>回到原课件 Slide 4：我们现在有理由把“寻找一个值”变成“维护仍可能含有答案的区间”。</p></aside>
+</section>
+<section id="proof"><h2>2. 为什么排除一半是安全的</h2>
+<p>辅助衔接 · 上一节确定了要维护的区间；现在证明缩小它不会丢掉答案，再说明过程能够结束。</p>
+<figure><div class="original-page" tabindex="0" role="region" aria-label="原课件第 2 页，窄屏可横向滚动"><a href="source-2.png"><img src="source-2.png" alt="自制原课件第 2 页：不变量、排除依据与终止条件。；完整转录和解释见紧邻正文。" width="1200" height="900"></a></div><figcaption>原图 · 未裁切的原课件整页；窄屏可横向滚动，点击放大。<a href="source.pdf#page=2">source.pdf · PDF 第 2 页 · Slide 5</a>。不变量、排除依据与终止条件。</figcaption></figure>
+<blockquote lang="en">Invariant: if x occurs, an occurrence remains in [l, r].<span class="source">原文逐字引用 · source.pdf · PDF 第 2 页 · Slide 5</span></blockquote>
+<p>翻译 · 不变量：如果 x 出现，区间 [l, r] 中仍保留至少一个出现位置。</p>
+<ol><li>翻译 · 初始 [0, n − 1] 包含所有有效索引。</li><li>翻译 · 选择 <span class="math">m = ⌊(l + r) / 2⌋</span>。</li><li>翻译 · 若 a[m] &lt; x，对 i ≤ m 有 a[i] ≤ a[m] &lt; x，因此令 l = m + 1；没有丢掉任何目标位置。</li><li>翻译 · 若 a[m] &gt; x，对称地令 r = m − 1。</li><li>翻译 · 若 a[m] = x，返回 m。</li><li>翻译 · 每个不相等的步骤都严格缩小区间；当 l &gt; r 时无候选，返回 −1。</li></ol>
+<p class="source">以上步骤按原顺序翻译 · source.pdf · PDF 第 2 页 · Slide 5；不等式沿原符号。</p>
+<aside class="supplement"><h3>新增解释 · 不变量不是“数组不变化”</h3><p>不变量是每轮开始都仍然成立的一句话：如果答案存在，候选区间里至少还保留一个答案。它连接了“缩小区间”和“不会漏答案”这两个目标。</p><ol><li><strong>建立：</strong>初始区间覆盖所有位置，所以任何存在的答案都在其中。空数组时区间是 [0, −1]，没有有效位置，也不会进入循环。</li><li><strong>保持（向右找）：</strong>若 a[m] &lt; x，左侧任何位置 i 的值满足 a[i] ≤ a[m] &lt; x，左侧连同中点都不等于目标。排除它们后，存在的答案仍在 [m + 1, r]。</li><li><strong>保持（向左找）：</strong>若 a[m] &gt; x，右侧任何 i ≥ m 满足 a[i] ≥ a[m] &gt; x，所以保留 [l, m − 1]。等于目标时直接返回中点。</li></ol><p><strong>进度提醒：</strong>现在已说明每步不会漏答案，还需要说明循环会停，以及停下时的结果可信。</p><ol start="4"><li><strong>终止：</strong>非空区间长度是 r − l + 1。向右更新后长度变为 r − m，向左更新后变为 m − l，都比旧长度小；长度不能无限下降而仍为正。</li><li><strong>回到目标：</strong>找到时返回的位置确实有 x。若区间变空但 x 存在，就与不变量矛盾，所以此时可以返回 −1。这完成了 Slide 4 提出的任务。</li></ol></aside>
+</section>
+<section id="algorithm"><h2>3. 算法与完整例题</h2>
+<p>辅助衔接 · 安全性与终止已得到解释，接下来按原课件将这些结论落实到边界更新，并跟踪同一个例子。</p>
+<figure><div class="original-page" tabindex="0" role="region" aria-label="原课件第 3 页，窄屏可横向滚动"><a href="source-3.png"><img src="source-3.png" alt="自制原课件第 3 页：算法伪代码与 x = 11 的两步轨迹。；完整转录和解释见紧邻正文。" width="1200" height="900"></a></div><figcaption>原图 · 未裁切的原课件整页；窄屏可横向滚动，点击放大。<a href="source.pdf#page=3">source.pdf · PDF 第 3 页 · Slide 6</a>。算法伪代码与 x = 11 的两步轨迹。</figcaption></figure>
+<pre><code>l, r = 0, len(a) - 1
+while l &lt;= r:
+	m = (l + r) // 2
+	if a[m] == x:
+		return m
+	if a[m] &lt; x:
+		l = m + 1
+	else:
+		r = m - 1
+return -1</code></pre>
+<p class="source">原代码转录 · source.pdf · PDF 第 3 页 · Slide 6；仅缩进改为 Tab。它是函数体片段，输入前提见第 1 节。</p>
+<p>原例翻译 · x = 11：先在 [0, 6] 取 m = 3，a[m] = 7，所以 l = 4；再在 [4, 6] 取 m = 5，a[m] = 11，返回 5。空输入返回 −1；有重复值时，返回任意命中位置即可。来源：source.pdf · PDF 第 3 页 · Slide 6。</p>
+<p class="supplement">新增解题解释 · 此例选择二分查找的依据是输入非降序；每一步利用已证的排除规则。返回 5 对应 a[5] = 11。原文没有要求第一个重复值，不能把这一算法当作查找首个位置的算法。</p>
+<h3>辅助交互 · 换一个目标，哪段仍是候选？</h3>
+<p>固定使用原图数组 [1, 3, 5, 7, 9, 11, 13]。手动选择目标与步骤，不自动播放。下方始终保留所有可选目标的完整静态轨迹。</p>
+<div class="controls" id="trace-controls" hidden><label for="target">目标</label><select id="target"><option>1</option><option>7</option><option>13</option><option>8</option></select><button type="button" id="previous">上一步</button><button type="button" id="next">下一步</button></div>
+<p id="live-state" class="interactive-state" aria-live="polite"></p>
+<div id="static-states"><h3>目标 x = 1</h3><table class="trace-table"><caption>x = 1 的完整静态状态</caption><thead><tr><th scope="col">候选区间</th><th scope="col">m</th><th scope="col">a[m]</th><th scope="col">理由与更新</th></tr></thead><tbody><tr><td>[0, 6]</td><td>3</td><td>7</td><td>右端移到 2</td></tr><tr><td>[0, 2]</td><td>1</td><td>3</td><td>右端移到 0</td></tr><tr><td>[0, 0]</td><td>0</td><td>1</td><td>命中，返回 0</td></tr></tbody></table><h3>目标 x = 7</h3><table class="trace-table"><caption>x = 7 的完整静态状态</caption><thead><tr><th scope="col">候选区间</th><th scope="col">m</th><th scope="col">a[m]</th><th scope="col">理由与更新</th></tr></thead><tbody><tr><td>[0, 6]</td><td>3</td><td>7</td><td>命中，返回 3</td></tr></tbody></table><h3>目标 x = 13</h3><table class="trace-table"><caption>x = 13 的完整静态状态</caption><thead><tr><th scope="col">候选区间</th><th scope="col">m</th><th scope="col">a[m]</th><th scope="col">理由与更新</th></tr></thead><tbody><tr><td>[0, 6]</td><td>3</td><td>7</td><td>左端移到 4</td></tr><tr><td>[4, 6]</td><td>5</td><td>11</td><td>左端移到 6</td></tr><tr><td>[6, 6]</td><td>6</td><td>13</td><td>命中，返回 6</td></tr></tbody></table><h3>目标 x = 8</h3><table class="trace-table"><caption>x = 8 的完整静态状态</caption><thead><tr><th scope="col">候选区间</th><th scope="col">m</th><th scope="col">a[m]</th><th scope="col">理由与更新</th></tr></thead><tbody><tr><td>[0, 6]</td><td>3</td><td>7</td><td>左端移到 4</td></tr><tr><td>[4, 6]</td><td>5</td><td>11</td><td>右端移到 4</td></tr><tr><td>[4, 4]</td><td>4</td><td>9</td><td>右端移到 3</td></tr><tr><td>[4, 3]</td><td>—</td><td>—</td><td>区间为空，返回 −1</td></tr></tbody></table></div>
+<p class="source">新增辅助演示 · 使用 Slide 4 的数组和 Slide 6 的规则；1、7、13、8 是补充例子。表内区间为每步比较之前的状态，空区间行不读取数组。</p>
+<p>回到本章目标：有序性允许整段排除，不变量保证答案不丢失，严格缩小保证结束，最终返回一个正确索引或 −1。本次未提供其他章节，不添加跨章节引用。</p>
+</section>
+	</main>
+	<script>
+		document.querySelector('.controls').hidden = false;
+		document.querySelector('#font-size').addEventListener('change', (event) => {
+			document.documentElement.style.fontSize = `${event.target.value}px`;
+		});
+		document.querySelector('#print').addEventListener('click', () => window.print());
+	</script>
+	<script src="lesson.js"></script>
+</body>
+</html>

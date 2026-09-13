@@ -1,0 +1,34 @@
+{
+	"browser": "153.0.8010.36",
+	"algorithmCases": 280,
+	"results": [
+		{
+			"level": "foundation",
+			"sourceImages": 3,
+			"targets": 4,
+			"layouts": [
+				"mobile",
+				"large",
+				"reflow-200"
+			],
+			"offline": true,
+			"noJS": true,
+			"print": true,
+			"pageErrors": []
+		},
+		{
+			"level": "fluent",
+			"sourceImages": 3,
+			"targets": 4,
+			"layouts": [
+				"mobile",
+				"large",
+				"reflow-200"
+			],
+			"offline": true,
+			"noJS": true,
+			"print": true,
+			"pageErrors": []
+		}
+	]
+}

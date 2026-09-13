@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>课件标题 · 个性化学习材料</title>
+	<link rel="stylesheet" href="reading.css">
+</head>
+<body>
+	<a class="skip-link" href="#content">跳到正文</a>
+	<main id="content">
+		<header>
+			<p class="eyebrow">个性化学习材料 · 根据已核对的原课件</p>
+			<h1>替换为本章标题</h1>
+			<p>替换为本章问题、当前学习起点与采用的假设。</p>
+			<div class="controls" hidden>
+				<label for="font-size">字号</label>
+				<select id="font-size"><option value="18">标准</option><option value="21">较大</option><option value="24">大</option></select>
+				<button type="button" id="print">打印 / 保存为 PDF</button>
+			</div>
+		</header>
+		<section aria-labelledby="section-title">
+			<h2 id="section-title">替换为原课件当前节标题</h2>
+			<p>用核对后的原文、来源以及已标识的翻译/辅助解释替换本段。按内容组织，不机械复制相同布局。</p>
+		</section>
+	</main>
+	<script>
+		document.querySelector('.controls').hidden = false;
+		document.querySelector('#font-size').addEventListener('change', (event) => {
+			document.documentElement.style.fontSize = `${event.target.value}px`;
+		});
+		document.querySelector('#print').addEventListener('click', () => window.print());
+	</script>
+</body>
+</html>
